@@ -1,0 +1,68 @@
+$color__logo: #f0ad4e;
+$color__login-button: #428bca;
+$height__logo: 35px;
+$height__button: 34px;
+
+.login-form {
+    &__title {
+        display: flex;
+        justify-content: center;
+        line-height: $height__logo;
+        margin: 30px 0;
+
+        &--logo {
+            flex: 0 0 auto;
+            color: $color__logo;
+            font-size: $height__logo;
+        }
+        &--text {
+            flex: 0 0 auto;
+            font-size: 24px;
+            line-height: $height__logo;
+            margin-left: 10px;
+        }
+    }
+    &__input {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 10px 0;
+
+        &--login, &--password {
+            flex: 0 0 auto;
+            width: 70% !important;
+            margin: 10px 0;
+        }
+    }
+    &__button {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0 40px;
+        &--login {
+            width: 90px;
+            height: $height__button;
+            padding: 3px 12px !important;
+            border-radius: $height__button/2 !important;
+            color: $color__login-button !important;
+            &:focus, &:active {
+                outline: none !important;
+            }
+            &-logging {
+                font-size: 26px;
+                vertical-align: middle;
+
+                animation: cog-spin infinite 3s linear;
+                transform-origin: 50% 12px;
+
+                @keyframes cog-spin {
+                    from {
+                        transform: rotate(0deg);
+                    }
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+            }
+        }
+    }
+}
