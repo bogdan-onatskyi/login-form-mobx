@@ -1,46 +1,60 @@
 import React, {Component} from 'react';
-import {Button, Modal} from 'react-bootstrap';
 import {observable, action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 
-import LoginForm from '../login-form/login-form';
+import {Row, Col} from 'react-bootstrap';
+
+import RenderUsers from './users/users';
+import ShowModal from './modal/show-modal';
 
 import './main-view.scss';
 
-@inject("loginStore") @observer
+@inject("usersStore") @observer
 class MainView extends Component {
     static PropTypes = {
-        loginStore: PropTypes.object.isRequired
+        usersStore: PropTypes.object.isRequired
     };
+
+    selectedUser = null;
 
     @observable showModal = false;
 
     @action.bound
-    openModal() {
+    openModal(user) {
         this.showModal = true;
+        this.selectedUser = user;
+        if (this.selectedUser.Auth !== '') {
+            this.selectedUser.Auth = '';
+        }
     };
 
     @action.bound
     closeModal() {
         this.showModal = false;
+        this.selectedUser = null;
     };
 
     render() {
-        const {Username, Password} = this.props.loginStore;
+        const {Users} = this.props.usersStore;
+
         return (
-            <main>
-                <h2>Данные из store:</h2>
-                <p>Username = {Username}</p>
-                <p>Password = {Password}</p>
+            <main className="main">
+                <h2 className="main__title">List of users:</h2>
 
-                <Button bsStyle="primary" onClick={this.openModal}>Open Modal</Button>
+                <RenderUsers users={Users} openModal={this.openModal}/>
 
-                <Modal show={this.showModal} onHide={this.closeModal}>
-                    <Modal.Body>
-                        <LoginForm/>
-                    </Modal.Body>
-                </Modal>
+                <Row className="main__server">
+                    <Col xs={12}>
+                        <p>Server's log:</p>
+                        You posted: ____ <br/>
+                        Server answered: ____ <br/>
+                    </Col>
+                </Row>
+
+                <ShowModal isShowModal={this.showModal}
+                           closeModal={this.closeModal}
+                           user={this.selectedUser}/>
             </main>
         );
     }

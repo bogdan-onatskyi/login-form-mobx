@@ -1,34 +1,38 @@
-$color__logo: #f0ad4e;
-$color__login-button: #428bca;
-$height__logo: 35px;
-$height__button: 34px;
+@import "../../../variables";
 
 .login-form {
     &__title {
         display: flex;
         justify-content: center;
-        line-height: $height__logo;
+        line-height: $height__login-form--logo;
         margin: 30px 0;
 
         &--logo {
             flex: 0 0 auto;
-            color: $color__logo;
-            font-size: $height__logo;
+            color: $color__login-form--logo;
+            font-size: $height__login-form--logo;
         }
         &--text {
             flex: 0 0 auto;
-            font-size: 24px;
-            line-height: $height__logo;
+            font-size: $font-size__login-form--logo-text;
+            line-height: $height__login-form--logo-text;
             margin-left: 10px;
         }
     }
-    &__input {
+    &__inputs {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin: 10px 0;
-
-        &--login, &--password {
+        &--username {
+            flex: 0 0 auto;
+            width: 70% !important;
+            margin: 0 !important;
+            &-input {
+                width: 100% !important;
+            }
+        }
+        &--password-input {
             flex: 0 0 auto;
             width: 70% !important;
             margin: 10px 0;
@@ -39,11 +43,11 @@ $height__button: 34px;
         justify-content: center;
         margin: 10px 0 40px;
         &--login {
-            width: 90px;
-            height: $height__button;
+            width: $width__login-form--button;
+            height: $height__login-form--button;
             padding: 3px 12px !important;
-            border-radius: $height__button/2 !important;
-            color: $color__login-button !important;
+            border-radius: $height__login-form--button/2 !important;
+            color: $color__login-form--button !important;
             &:focus, &:active {
                 outline: none !important;
             }

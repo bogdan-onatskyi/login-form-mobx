@@ -6,19 +6,19 @@ import Header from '../header/header';
 import MainView from '../main-view/main-view';
 import Footer from '../footer/footer';
 
-import LoginStore from '../../stores/login-store';
+import UsersStore from '../../stores/users-store';
 
 import './app.scss';
 
 useStrict(true);
 
-const loginStore = new LoginStore();
-const stores = {loginStore};
+const usersStore = new UsersStore();
+const stores = {usersStore};
 
 const Index = () => (
     <Provider {...stores}>
         <div className="app">
-            <Header text="Заголовок"/>
+            <Header text="Header"/>
             <MainView/>
             <Footer/>
         </div>

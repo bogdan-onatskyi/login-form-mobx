@@ -1,4 +1,18 @@
-.modal-dialog {
-    max-width: 320px;
-    margin: 10px auto !important;
+@import "../../variables";
+
+.main {
+    flex: 1 1 auto;
+    > .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    &__title {
+        text-align: center;
+    }
+    &__users {
+
+    }
+    &__server {
+
+    }
 }

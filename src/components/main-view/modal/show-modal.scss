@@ -1,0 +1,9 @@
+@import "../../../variables";
+
+.modal {
+    &-dialog {
+        max-width: $max-width__modal--dialog;
+        min-height: $min-height__modal--dialog;
+        margin: 10px auto !important;
+    }
+}

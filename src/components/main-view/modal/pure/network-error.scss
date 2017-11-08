@@ -1,0 +1,18 @@
+@import "../../../../variables";
+
+.error {
+    display: flex;
+    justify-content: center;
+    line-height: $height__error--icon;
+    margin: $margin__error 0;
+    &__icon {
+        flex: 0 0 auto;
+        color: $color__error--icon;
+        font-size: $height__error--icon;
+    }
+    &__text {
+        flex: 0 0 auto;
+        font-size: $font-size__error--text;
+        margin-left: 10px;
+    }
+}

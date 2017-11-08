@@ -2,7 +2,10 @@ const mockServer = require('mockserver-node');
 const mockServerClient = require('mockserver-client').mockServerClient;
 const mockServer_port = 8080;
 
-mockServer.start_mockserver({serverPort: mockServer_port, verbose: true})
+mockServer.start_mockserver({
+    serverPort: mockServer_port, verbose: true, trace: true,
+    systemProperties: "-Dmockserver.enableCORSForAllResponses=true"
+})
     .then(function () {
         mockServerClient("localhost", mockServer_port).mockAnyResponse({
             "httpRequest": {
@@ -29,16 +32,50 @@ mockServer.start_mockserver({serverPort: mockServer_port, verbose: true})
                         "name": "Access-Control-Allow-Origin",
                         "values": ["http://localhost:3000"]
                     },
-                    // {
-                    //     "name": "Access-Control-Allow-Credentials",
-                    //     "values": ["true"]
-                    // }
+                    {
+                        "name": "Access-Control-Allow-Credentials",
+                        "values": ["true"]
+                    }
                 ],
                 "body": JSON.stringify({Auth: "Denied"}),
                 "delay": {
-                    "timeUnit": "SECONDS",
-                    "value": 1
+                    "timeUnit": "MILLISECONDS",
+                    "value": 100
                 }
             }
         });
     });
+// .then(function () {
+//     mockServerClient("localhost", mockServer_port).mockAnyResponse({
+//         "httpRequest": {
+//             "method": "GET",
+//             "path": "/log",
+//         },
+//         "httpResponse": {
+//             "statusCode": 200,
+//             "headers": [
+//                 {
+//                     "name": "Content-Type",
+//                     "values": ["application/json; charset=utf-8"]
+//                 },
+//                 {
+//                     "name": "Cache-Control",
+//                     "values": ["public, max-age=86400"]
+//                 },
+//                 {
+//                     "name": "Access-Control-Allow-Origin",
+//                     "values": ["http://localhost:3000"]
+//                 },
+//                 // {
+//                 //     "name": "Access-Control-Allow-Credentials",
+//                 //     "values": ["true"]
+//                 // }
+//             ],
+//             "body": JSON.stringify({Auth: "Denied"}),
+//             "delay": {
+//                 "timeUnit": "SECONDS",
+//                 "value": 1
+//             }
+//         }
+//     });
+// });

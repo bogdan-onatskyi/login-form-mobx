@@ -1,0 +1,18 @@
+@import "../../../../variables";
+
+.logged {
+    display: flex;
+    justify-content: center;
+    line-height: $height__logged--icon;
+    margin: $margin__logged 0;
+    &__icon {
+        flex: 0 0 auto;
+        color: $color__logged--icon;
+        font-size: $height__logged--icon;
+    }
+    &__text {
+        flex: 0 0 auto;
+        font-size: $font-size__logged--text;
+        margin-left: 10px;
+    }
+}
