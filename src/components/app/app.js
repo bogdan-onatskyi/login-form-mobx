@@ -7,18 +7,21 @@ import MainView from '../main-view/main-view';
 import Footer from '../footer/footer';
 
 import UsersStore from '../../stores/users-store';
+import LogsStore from "../../stores/logs-store";
 
 import './app.scss';
 
 useStrict(true);
 
 const usersStore = new UsersStore();
-const stores = {usersStore};
+const logsStore = new LogsStore(10);
+
+const stores = {usersStore, logsStore};
 
 const Index = () => (
     <Provider {...stores}>
         <div className="app">
-            <Header text="Header"/>
+            <Header text="Simple MobX Login form"/>
             <MainView/>
             <Footer/>
         </div>

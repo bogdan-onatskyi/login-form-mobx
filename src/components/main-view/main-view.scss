@@ -10,9 +10,21 @@
         text-align: center;
     }
     &__users {
-
+        margin-top: 15px;
+        &--user {
+            min-width: 150px;
+        }
     }
     &__server {
-
+        margin-top: 15px;
+        &--record {
+            font-size: $font-size__server-record;
+            &-timestamp {
+                color: gray;
+            }
+            &-message {
+                color: black;
+            }
+        }
     }
 }

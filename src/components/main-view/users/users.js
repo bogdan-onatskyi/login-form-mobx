@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 
 import {Row, Col, Button} from 'react-bootstrap';
 
-import './users.scss';
-
 const RenderUser = observer(({user}) => {
     const {Username, Password, Auth} = user;
 
@@ -25,9 +23,9 @@ RenderUser.PropTypes = {
 RenderUser.displayName = 'RenderUser';
 
 const UsersView = observer(({users, openModal}) => (
-    <Row>
+    <Row className="main__users">
         {users.map((user, i) => (
-            <Col className="user" xs={4} key={`user_${i}`}>
+            <Col className="main__users--user" xs={4} key={`user_${i}`}>
                 <RenderUser user={user}/>
                 <Button bsStyle="primary"
                         onClick={openModal.bind(this, user)}>

@@ -3,17 +3,17 @@ import {observable, action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 
-import {Row, Col} from 'react-bootstrap';
-
-import RenderUsers from './users/users';
+import UsersView from './users/users';
+import ServerView from './server/server';
 import ShowModal from './modal/show-modal';
 
 import './main-view.scss';
 
-@inject("usersStore") @observer
+@inject("usersStore", "logsStore") @observer
 class MainView extends Component {
     static PropTypes = {
-        usersStore: PropTypes.object.isRequired
+        usersStore: PropTypes.object.isRequired,
+        logsStore: PropTypes.object.isRequired
     };
 
     selectedUser = null;
@@ -37,20 +37,15 @@ class MainView extends Component {
 
     render() {
         const {Users} = this.props.usersStore;
+        const {Logs} = this.props.logsStore;
 
         return (
             <main className="main">
                 <h2 className="main__title">List of users:</h2>
 
-                <RenderUsers users={Users} openModal={this.openModal}/>
+                <UsersView users={Users} openModal={this.openModal}/>
 
-                <Row className="main__server">
-                    <Col xs={12}>
-                        <p>Server's log:</p>
-                        You posted: ____ <br/>
-                        Server answered: ____ <br/>
-                    </Col>
-                </Row>
+                <ServerView logs={Logs}/>
 
                 <ShowModal isShowModal={this.showModal}
                            closeModal={this.closeModal}

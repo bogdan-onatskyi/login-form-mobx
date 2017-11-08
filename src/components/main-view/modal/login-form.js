@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {observable, computed, action} from 'mobx';
-import {observer} from 'mobx-react';
+import {inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 
 import axios from 'axios';
@@ -9,9 +9,10 @@ import {FormGroup, FormControl, Button, Glyphicon} from 'react-bootstrap';
 
 import './login-form.scss';
 
-@observer
+@inject("logsStore") @observer
 class RenderLoginForm extends Component {
     static propTypes = {
+        logsStore: PropTypes.object,
         user: PropTypes.object.isRequired
     };
 
@@ -32,13 +33,27 @@ class RenderLoginForm extends Component {
         this.isLogging = bool;
     }
 
+    static logRecord(comment, data) {
+        const valuesArray = [];
+        for (let prop in data) {
+            valuesArray.push(prop + ':' + data[prop]);
+        }
+        return `${comment} { ${valuesArray.join(', ')} }`;
+    }
+
     handleLogging = () => {
         this.setIsLogging(true);
+
+        const {logsStore} = this.props;
 
         const reqData = {
             Username: this.props.user.Username,
             Password: this.props.user.Password
         };
+
+        logsStore.addRecord(
+            RenderLoginForm.logRecord('You posted:', reqData)
+        );
 
         axios.post('http://localhost:8080/login', reqData)
         // axios.post('http://localhost:8080/login', JSON.stringify(reqData))
@@ -46,10 +61,14 @@ class RenderLoginForm extends Component {
             .then(data => {
                 this.setIsLogging(false);
                 this.props.user.setAuth(data.Auth);
+                logsStore.addRecord(
+                    RenderLoginForm.logRecord('Server answered:', data)
+                );
             })
             .catch((error) => {
                 this.setIsLogging(false);
                 this.props.user.setAuth('Network Error');
+                logsStore.addRecord('Network Error');
 
                 if (process.env.NODE_ENV !== 'production') {
                     console.log(error);
