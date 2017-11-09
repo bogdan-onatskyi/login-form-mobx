@@ -89,36 +89,38 @@ class RenderLoginForm extends Component {
             return;
         }
 
-        axios.post('http://localhost:8080/login', reqData)
-        // axios.post('http://localhost:8080/login', JSON.stringify(reqData))
-            .then(response => response.data)
-            .then(data => {
-                if (user.Title === 'simulate network error')
-                    data = {
-                        Auth: 'Network Error'
-                    };
+        if (process.env.NODE_ENV !== 'production-gh-pages') {
+            axios.post('http://localhost:8080/login', reqData)
+            // axios.post('http://localhost:8080/login', JSON.stringify(reqData))
+                .then(response => response.data)
+                .then(data => {
+                    if (user.Title === 'simulate network error')
+                        data = {
+                            Auth: 'Network Error'
+                        };
 
-                user.setAuth(data.Auth);
+                    user.setAuth(data.Auth);
 
-                logsStore.addRecord(
-                    user.Title === 'simulate network error'
-                        ? 'Network Error'
-                        : logRecord('Server answered:', data)
-                );
+                    logsStore.addRecord(
+                        user.Title === 'simulate network error'
+                            ? 'Network Error'
+                            : logRecord('Server answered:', data)
+                    );
 
-                this.setIsLoggingIn(false);
-            })
-            .catch((error) => {
-                user.setAuth('Network Error');
+                    this.setIsLoggingIn(false);
+                })
+                .catch((error) => {
+                    user.setAuth('Network Error');
 
-                logsStore.addRecord('Network Error');
+                    logsStore.addRecord('Network Error');
 
-                if (process.env.NODE_ENV === 'development') {
-                    console.log(error);
-                }
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log(error);
+                    }
 
-                this.setIsLoggingIn(false);
-            });
+                    this.setIsLoggingIn(false);
+                });
+        }
     };
 
     getValidationState = () => this.props.user.Auth === 'Denied' ? 'error' : null;
