@@ -6,15 +6,12 @@ import Header from '../header/header';
 import MainView from '../main-view/main-view';
 import Footer from '../footer/footer';
 
-import UsersStore from '../../stores/users-store';
-import LogsStore from "../../stores/logs-store";
+import usersStore from '../../stores/users-store';
+import logsStore from "../../stores/logs-store";
 
 import './app.scss';
 
 useStrict(true);
-
-const usersStore = new UsersStore();
-const logsStore = new LogsStore(10);
 
 const stores = {usersStore, logsStore};
 

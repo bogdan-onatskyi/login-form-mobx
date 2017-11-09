@@ -8,8 +8,8 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const common = require('./webpack.common.js');
 
-// const NODE_ENV = 'production';
-const NODE_ENV = 'production-gh-pages';
+const NODE_ENV = 'production';
+// const NODE_ENV = 'production-gh-pages';
 /*
     Use 'production-gh-pages' for simulate server behavior when run from gh-pages
 

@@ -20,17 +20,14 @@ app.post('/login', function (req, res) {
     const timeOut = 1000;
     const {Username, Password} = req.body;
 
-    let retData = {Auth: "Denied"};
+    let retData = {
+        Auth: "Denied"
+    };
 
     if (Username === 'User' && Password === 'Password')
         retData = {
             Auth: "Logged",
             Language: "EN"
-        };
-
-    if (Username === 'foo' && Password === 'bar')
-        retData = {
-            Auth: "Denied"
         };
 
     res.setHeader('Content-Type', 'application/json');

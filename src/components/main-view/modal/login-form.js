@@ -16,7 +16,7 @@ class RenderLoginForm extends Component {
         user: PropTypes.object.isRequired
     };
 
-    @observable isLogging = false;
+    @observable isLoggingIn = false;
 
     @action.bound
     handleChangeLogin(e) {
@@ -29,139 +29,136 @@ class RenderLoginForm extends Component {
     };
 
     @action.bound
-    setIsLogging(bool) {
-        this.isLogging = bool;
-    }
+    setIsLoggingIn(bool) {
+        this.isLoggingIn = bool;
+    };
 
-    static logRecord(comment, data) {
-        const valuesArray = [];
-        for (let prop in data) {
-            valuesArray.push(prop + ':' + data[prop]);
-        }
-        return `${comment} { ${valuesArray.join(', ')} }`;
-    }
+    handleLoggingIn = () => {
 
-    handleLogging = () => {
-        this.setIsLogging(true);
+        const logRecord = (comment, data) => {
+            const valuesArray = [];
 
-        const {logsStore} = this.props;
+            for (let prop in data) {
+                valuesArray.push(prop + ':' + data[prop]);
+            }
 
+            return `${comment} { ${valuesArray.join(', ')} }`;
+        };
+        const {logsStore, user} = this.props;
         const reqData = {
-            Username: this.props.user.Username,
-            Password: this.props.user.Password
+            Username: user.Username,
+            Password: user.Password
         };
 
+        this.setIsLoggingIn(true);
+
         logsStore.addRecord(
-            RenderLoginForm.logRecord('You posted:', reqData)
+            logRecord('You posted:', reqData)
         );
+
+        if (process.env.NODE_ENV === 'production-gh-pages') {
+            // This block simulates server behavior for gh-pages
+            const {Username, Password} = reqData;
+
+            setTimeout(() => {
+                let data = {
+                    Auth: "Denied"
+                };
+
+                if (Username === 'User' && Password === 'Password')
+                    data = {
+                        Auth: "Logged",
+                        Language: "EN"
+                    };
+
+                if (user.Title === 'simulate network error')
+                    data = {
+                        Auth: 'Network Error'
+                    };
+
+                user.setAuth(data.Auth);
+
+                logsStore.addRecord(
+                    user.Title === 'simulate network error'
+                        ? 'Network Error'
+                        : logRecord('Server answered:', data)
+                );
+
+                this.setIsLoggingIn(false);
+            }, 1000);
+            return;
+        }
 
         axios.post('http://localhost:8080/login', reqData)
         // axios.post('http://localhost:8080/login', JSON.stringify(reqData))
             .then(response => response.data)
             .then(data => {
-                this.setIsLogging(false);
-                this.props.user.setAuth(data.Auth);
+                if (user.Title === 'simulate network error')
+                    data = {
+                        Auth: 'Network Error'
+                    };
+
+                user.setAuth(data.Auth);
+
                 logsStore.addRecord(
-                    RenderLoginForm.logRecord('Server answered:', data)
+                    user.Title === 'simulate network error'
+                        ? 'Network Error'
+                        : logRecord('Server answered:', data)
                 );
+
+                this.setIsLoggingIn(false);
             })
             .catch((error) => {
-                this.setIsLogging(false);
-                this.props.user.setAuth('Network Error');
+                user.setAuth('Network Error');
+
                 logsStore.addRecord('Network Error');
 
-                if (process.env.NODE_ENV !== 'production') {
+                if (process.env.NODE_ENV === 'development') {
                     console.log(error);
                 }
+
+                this.setIsLoggingIn(false);
             });
-
-        // const xhr = new XMLHttpRequest();
-        // xhr.open('POST', 'http://localhost:8080/login', true);
-        // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        //
-        // const data = JSON.stringify(this.currentUser);
-        //
-        // xhr.send(data);
-        // if (process.env.NODE_ENV !== 'production') {
-        //     console.log("__" + data + "__");
-        // }
-        //
-        // if (xhr.status !== 200) {
-        //     console.log('1. ' + xhr.status + ': ' + xhr.statusText);
-        // } else {
-        //     console.log('2. ' + xhr.responseText);
-        // }
-
-        // const checkStatus = (response) => {
-        //     if (response.status >= 200 && response.status < 300) return response;
-        //
-        //     const error = new Error(response.statusText);
-        //     error.response = response;
-        //     throw error;
-        // };
-        //
-        // const parseJSON = (response) => response.json();
-        //
-        // fetch('http://localhost:8090/login', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     mode: "no-cors",
-        //     body: JSON.stringify(this.currentUser)
-        // })
-        //     .then(checkStatus)
-        //     .then(parseJSON)
-        //     .then(function (data) {
-        //         console.log('request succeeded with JSON response', data);
-        //     })
-        //     .catch(function (error) {
-        //         console.log('request failed', error);
-        //     });
     };
 
-    getValidationState() {
-        return this.props.user.Auth === 'Denied' ? 'error' : null;
-    }
+    getValidationState = () => this.props.user.Auth === 'Denied' ? 'error' : null;
 
-    render() {
-        return (
-            <form className="login-form" name="login-form">
-                <div className="login-form__title">
-                    <Glyphicon className="login-form__title--logo" glyph="fire"/>
-                    <span className="login-form__title--text">Login</span>
-                </div>
+    render = () => (
+        <form className="login-form" name="login-form">
+            <div className="login-form__title">
+                <Glyphicon className="login-form__title--logo" glyph="fire"/>
+                <span className="login-form__title--text">Login</span>
+            </div>
 
-                <div className="login-form__inputs">
-                    <FormGroup className="login-form__inputs--username"
-                               validationState={this.getValidationState()}>
-                        <FormControl
-                            className="login-form__inputs--username-input"
-                            type="text"
-                            value={this.props.user.Username}
-                            placeholder="Login"
-                            onChange={this.handleChangeLogin}/>
-                    </FormGroup>
-
+            <div className="login-form__inputs">
+                <FormGroup className="login-form__inputs--username"
+                           validationState={this.getValidationState()}>
                     <FormControl
-                        className="login-form__inputs--password-input"
-                        type="password"
-                        value={this.props.user.Password}
-                        placeholder="Password"
-                        onChange={this.handleChangePassword}/>
-                </div>
+                        className="login-form__inputs--username-input"
+                        type="text"
+                        value={this.props.user.Username}
+                        placeholder="Login"
+                        onChange={this.handleChangeLogin}/>
+                </FormGroup>
 
-                <div className="login-form__button">
-                    <Button className="login-form__button--login" onClick={this.handleLogging}>
-                        {this.isLogging
-                            ? <Glyphicon className="login-form__button--login-logging" glyph="cog"/>
-                            : <span>Login &rarr;</span>
-                        }
-                    </Button>
-                </div>
-            </form>
-        );
-    }
+                <FormControl
+                    className="login-form__inputs--password-input"
+                    type="password"
+                    value={this.props.user.Password}
+                    placeholder="Password"
+                    onChange={this.handleChangePassword}/>
+            </div>
+
+            <div className="login-form__button">
+                <Button className="login-form__button--login" onClick={this.handleLoggingIn}>
+                    {this.isLoggingIn
+                        ? <Glyphicon className="login-form__button--login-logging" glyph="cog"/>
+                        : <span>Login &rarr;</span>
+                    }
+                </Button>
+            </div>
+        </form>
+    );
 }
 
 export default RenderLoginForm;

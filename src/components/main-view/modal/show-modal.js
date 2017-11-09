@@ -18,7 +18,7 @@ class ShowModal extends Component {
         user: PropTypes.any
     };
 
-    renderModalBody() {
+    renderModalBody = () => {
         const {closeModal, user} = this.props;
 
         if (!user) return;
@@ -38,7 +38,7 @@ class ShowModal extends Component {
         }
     };
 
-    render() {
+    render = () => {
         const {isShowModal, closeModal} = this.props;
 
         return (
@@ -48,7 +48,7 @@ class ShowModal extends Component {
                 </Modal.Body>
             </Modal>
         );
-    }
+    };
 }
 
 export default ShowModal;

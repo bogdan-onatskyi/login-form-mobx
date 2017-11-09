@@ -5,6 +5,9 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const common = require('./webpack.common.js');
 
+const NODE_ENV = 'development';
+// const NODE_ENV = 'production-gh-pages';
+
 module.exports = merge(common, {
     entry: [
         // 'webpack-hot-middleware/client?reload=true',
@@ -50,7 +53,7 @@ module.exports = merge(common, {
 
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('development')
+            'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
         }),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),

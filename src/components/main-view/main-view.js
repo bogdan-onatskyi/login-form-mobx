@@ -21,9 +21,9 @@ class MainView extends Component {
     @observable showModal = false;
 
     @action.bound
-    openModal(user) {
+    openModal(index) {
         this.showModal = true;
-        this.selectedUser = user;
+        this.selectedUser = this.props.usersStore.Users[index];
         if (this.selectedUser.Auth !== '') {
             this.selectedUser.Auth = '';
         }
@@ -35,7 +35,7 @@ class MainView extends Component {
         this.selectedUser = null;
     };
 
-    render() {
+    render = () => {
         const {Users} = this.props.usersStore;
         const {Logs} = this.props.logsStore;
 
@@ -52,7 +52,7 @@ class MainView extends Component {
                            user={this.selectedUser}/>
             </main>
         );
-    }
+    };
 }
 
 export default MainView;

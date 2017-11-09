@@ -1,16 +1,18 @@
 import {observable, action} from 'mobx';
 
 class User {
+    Title = '';
     @observable Username = '';
     @observable Password = '';
     @observable Auth = '';
 
-    constructor(username, password, auth = '') {
-        this.setupUser(username, password, auth);
+    constructor(title, username, password, auth = '') {
+        this.setupUser(title, username, password, auth);
     };
 
     @action.bound
-    setupUser(username, password, auth = '') {
+    setupUser(title, username, password, auth = '') {
+        this.Title = title;
         this.Username = username;
         this.Password = password;
         this.Auth = auth;
@@ -24,10 +26,12 @@ class User {
 
 class UsersStore {
     Users = [
-        new User('User', 'Password', ''),
-        new User('foo', 'bar', ''),
-        new User('', '', '')
+        new User('correct initial data', 'User', 'Password', ''),
+        new User('incorrect initial data', 'foo', 'bar', ''),
+        new User('without initial data', '', '', ''),
+        new User('simulate network error', '', '', '')
     ];
 }
 
-export default UsersStore;
+const usersStore = new UsersStore();
+export default usersStore;

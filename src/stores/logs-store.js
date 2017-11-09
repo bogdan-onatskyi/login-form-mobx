@@ -11,8 +11,6 @@ class LogRecord {
 }
 
 class LogsStore {
-    maxRecords = 10;
-
     @observable Logs = [];
 
     constructor(maxRecords) {
@@ -40,4 +38,5 @@ class LogsStore {
     }
 }
 
-export default LogsStore;
+const logsStore = new LogsStore(10);
+export default logsStore;
