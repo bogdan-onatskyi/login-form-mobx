@@ -8,6 +8,16 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const common = require('./webpack.common.js');
 
+// const NODE_ENV = 'production';
+const NODE_ENV = 'production-gh-pages';
+/*
+    Use 'production-gh-pages' for simulate server behavior when run from gh-pages
+
+    See:    src/login-form.js ->
+            handleLoggingIn ->
+            if (process.env.NODE_ENV === 'production-gh-pages') {...}
+*/
+
 module.exports = merge(common, {
     output: {
         filename: 'bundle.min.js',
@@ -24,7 +34,6 @@ module.exports = merge(common, {
             {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
-                    // use: ['css-loader', 'sass-loader'],
                     use: [
                         {loader: 'css-loader', options: {importLoaders: 1}},
                         'postcss-loader',
@@ -38,7 +47,7 @@ module.exports = merge(common, {
     plugins: [
         new CleanWebpackPlugin(['docs']),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production')
+            'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
         }),
         new UglifyJSPlugin({
             sourceMap: false,
