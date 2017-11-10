@@ -21,8 +21,9 @@ class LogsStore {
     addZero = (num, digit = 2) => {
         let retStr = '';
 
-        while (num < Math.pow(10, --digit))
-            retStr += 0;
+        for (let i = digit - 1; i > 0; i--) {
+            if (num < Math.pow(10, i)) retStr += 0;
+        }
 
         return retStr + num.toString();
     };

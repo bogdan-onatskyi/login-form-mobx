@@ -34,6 +34,7 @@ class RenderLoginForm extends Component {
     };
 
     handleLoggingIn = () => {
+        if (this.isLoggingIn) return;
 
         const logRecord = (comment, data) => {
             const valuesArray = [];
