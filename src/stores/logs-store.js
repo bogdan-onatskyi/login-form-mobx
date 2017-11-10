@@ -18,12 +18,22 @@ class LogsStore {
         this.addRecord('Server\'s log messages will be printed here...');
     }
 
+    addZero = (num, digit = 2) => {
+        let retStr = '';
+
+        while (num < 10 * (--digit))
+            retStr += 0;
+
+        return retStr + num.toString();
+    };
+
     @action.bound
     addRecord(record) {
         const now = new Date();
-        const dateStr = `${now.getDate()}.${now.getMonth()}.${now.getFullYear()} \
-                ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} \
-                ${now.getMilliseconds()}`;
+        const dateStr =
+            `${this.addZero(now.getDate())}.${this.addZero(now.getMonth())}.${now.getFullYear()} \
+             ${this.addZero(now.getHours())}:${this.addZero(now.getMinutes())}:${this.addZero(now.getSeconds())} \
+             ${this.addZero(now.getMilliseconds(), 3)}`;
 
         if (this.Logs.length < this.maxRecords) {
             this.Logs.push(
