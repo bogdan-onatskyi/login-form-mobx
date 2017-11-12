@@ -36,11 +36,13 @@ class RenderLoginForm extends Component {
     handleLoggingIn = () => {
         if (this.isLoggingIn) return;
 
-        const logRecord = (comment, data) => {
+        const toString = (comment, data) => {
             const valuesArray = [];
+            let value;
 
             for (let prop in data) {
-                valuesArray.push(prop + ':' + data[prop]);
+                value = data[prop] === "" ? '""' : data[prop];
+                valuesArray.push(`${prop}:${value}`);
             }
 
             return `${comment} { ${valuesArray.join(', ')} }`;
@@ -54,7 +56,7 @@ class RenderLoginForm extends Component {
         this.setIsLoggingIn(true);
 
         logsStore.addRecord(
-            logRecord('You posted:', reqData)
+            toString('You posted:', reqData)
         );
 
         if (process.env.NODE_ENV === 'production-gh-pages') {
@@ -82,7 +84,7 @@ class RenderLoginForm extends Component {
                 logsStore.addRecord(
                     user.Title === 'simulate network error'
                         ? 'Network Error'
-                        : logRecord('Server answered:', data)
+                        : toString('Server answered:', data)
                 );
 
                 this.setIsLoggingIn(false);
@@ -105,7 +107,7 @@ class RenderLoginForm extends Component {
                     logsStore.addRecord(
                         user.Title === 'simulate network error'
                             ? 'Network Error'
-                            : logRecord('Server answered:', data)
+                            : toString('Server answered:', data)
                     );
 
                     this.setIsLoggingIn(false);
