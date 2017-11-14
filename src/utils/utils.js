@@ -9,3 +9,19 @@ exports.toString = (comment, data) => {
 
     return `${comment} { ${valuesArray.join(', ')} }`;
 };
+
+exports.parseData = (data) => {
+    const {Username, Password} = data;
+
+    let retData = {
+        Auth: "Denied"
+    };
+
+    if (Username === 'User' && Password === 'Password')
+        retData = {
+            Auth: "Logged",
+            Language: "EN"
+        };
+
+    return retData;
+};

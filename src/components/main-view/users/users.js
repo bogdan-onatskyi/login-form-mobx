@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 
-import {Row, Col, Button} from 'react-bootstrap';
+import Row from 'react-bootstrap/es/Row';
+import Col from 'react-bootstrap/es/Col';
+import Button from 'react-bootstrap/es/Button';
 
 const RenderUser = observer(({user}) => {
     const {Title, Username, Password, Auth} = user;

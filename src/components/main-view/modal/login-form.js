@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
-import {observable, computed, action} from 'mobx';
+import {observable, action} from "mobx";
 import {inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import {FormGroup, FormControl, Button, Glyphicon} from 'react-bootstrap';
-import {toString} from '../../../utils/utils';
+import {toString, parseData} from '../../../utils/utils';
+
+import FormGroup from 'react-bootstrap/es/FormGroup';
+import FormControl from 'react-bootstrap/es/FormControl';
+import Button from 'react-bootstrap/es/Button';
+import Glyphicon from 'react-bootstrap/es/Glyphicon';
 
 import './login-form.scss';
 
@@ -34,84 +38,61 @@ class RenderLoginForm extends Component {
 
     handleLoggingIn = () => {
         if (this.isLoggingIn) return;
-
-        const {logsStore, user} = this.props;
-        const reqData = {
-            Username: user.Username,
-            Password: user.Password
-        };
-
         this.setIsLoggingIn(true);
 
-        logsStore.addRecord(
-            toString('You posted:', reqData)
-        );
+        const timeOut = 1000;
+        const networkError = 'Network Error';
 
-        if (process.env.NODE_ENV === 'production-gh-pages') {
-            const {Username, Password} = reqData;
+        const {logsStore, user} = this.props;
+        const request = {
+            Username: user.Username,
+            Password: user.Password,
+        };
 
-            console.warn('It simulates server behavior for gh-pages');
+        const delay = (t) => new Promise(resolve => {
+            setTimeout(resolve, t);
+        });
 
-            setTimeout(() => {
-                let data = {
-                    Auth: "Denied"
-                };
+        logsStore.addRecord(toString('You posted:', request));
 
-                if (Username === 'User' && Password === 'Password')
-                    data = {
-                        Auth: "Logged",
-                        Language: "EN"
-                    };
-
+        Promise.resolve(request)
+            .then(request => {
                 if (user.Title === 'simulate network error')
-                    data = {
-                        Auth: 'Network Error'
-                    };
+                    return delay(timeOut).then(() => {
+                        return {Auth: networkError};
+                    });
 
+                if (process.env.NODE_ENV_GH_PAGES === 'production-gh-pages') {
+                    console.warn('It simulates server behavior for gh-pages');
+
+                    return delay(timeOut).then(() => parseData(request));
+
+                } else {
+                    return (
+                        axios.post('/login', request, {timeout: 2000})
+                            .then(response => response.data)
+                            .catch(error => {
+                                console.log(error);
+                                return {Auth: networkError};
+                            })
+                    );
+                }
+            })
+            .then(data => {
                 user.setAuth(data.Auth);
 
                 logsStore.addRecord(
-                    user.Title === 'simulate network error'
-                        ? 'Network Error'
+                    data.Auth === networkError
+                        ? networkError
                         : toString('Server answered:', data)
                 );
 
                 this.setIsLoggingIn(false);
-            }, 1000);
-            return;
-        }
-
-        if (process.env.NODE_ENV !== 'production-gh-pages') {
-            axios.post('/login', reqData)
-                .then(response => response.data)
-                .then(data => {
-                    if (user.Title === 'simulate network error')
-                        data = {
-                            Auth: 'Network Error'
-                        };
-
-                    user.setAuth(data.Auth);
-
-                    logsStore.addRecord(
-                        user.Title === 'simulate network error'
-                            ? 'Network Error'
-                            : toString('Server answered:', data)
-                    );
-
-                    this.setIsLoggingIn(false);
-                })
-                .catch((error) => {
-                    user.setAuth('Network Error');
-
-                    logsStore.addRecord('Network Error');
-
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log(error);
-                    }
-
-                    this.setIsLoggingIn(false);
-                });
-        }
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setIsLoggingIn(false);
+            });
     };
 
     getValidationState = () => this.props.user.Auth === 'Denied' ? 'error' : null;

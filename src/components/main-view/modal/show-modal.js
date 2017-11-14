@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 
-import {Modal} from 'react-bootstrap';
+import Modal from 'react-bootstrap/es/Modal';
 
 import RenderLoginForm from './login-form';
 import RenderLogged from './pure/logged';

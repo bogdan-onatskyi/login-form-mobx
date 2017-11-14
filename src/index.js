@@ -4,7 +4,7 @@ import {AppContainer} from 'react-hot-loader';
 
 import App from './components/app/app';
 
-import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './index.scss';
 

@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 
-import {Row, Col} from 'react-bootstrap';
+import Row from 'react-bootstrap/es/Row';
+import Col from 'react-bootstrap/es/Col';
 
 const LogsServerView = observer(({logs}) => (
     <Row className="main__server">

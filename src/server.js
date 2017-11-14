@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require('express');
 const bodyParser = require('body-parser');
-const {toString} = require('./utils/utils');
+const {toString, parseData} = require('./utils/utils');
 
 const PORT = 3000;
 const PUBLIC_PATH = path.join(__dirname, 'docs');
@@ -35,28 +35,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.post('/login', function (req, res) {
-
     const timeOut = 1000;
-    const {Username, Password} = req.body;
-
-    let retData = {
-        Auth: "Denied"
-    };
-
-    if (Username === 'User' && Password === 'Password')
-        retData = {
-            Auth: "Logged",
-            Language: "EN"
-        };
-
-    res.setHeader('Content-Type', 'application/json');
-    setTimeout(function () {
-        res.send(JSON.stringify(retData));
-    }, timeOut);
 
     console.log('');
     console.log(toString('You posted:', req.body));
-    console.log(toString('Server answered:', retData));
+
+    res.setHeader('Content-Type', 'application/json');
+    setTimeout(function () {
+        const retData = parseData(req.body);
+
+        res.send(JSON.stringify(retData));
+
+        console.log(toString('Server answered:', retData));
+    }, timeOut);
 });
 
 app.all("/", function (req, res) {

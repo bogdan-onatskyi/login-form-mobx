@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Glyphicon} from 'react-bootstrap';
+import Glyphicon from 'react-bootstrap/es/Glyphicon';
 
 import './logged.scss';
 
