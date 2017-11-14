@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {Row, Col} from 'react-bootstrap';
 
-const ServerView = observer(({logs}) => (
+const LogsServerView = observer(({logs}) => (
     <Row className="main__server">
         {logs.map((record, i) => {
             const {timeStamp, message} = record;
@@ -20,10 +20,10 @@ const ServerView = observer(({logs}) => (
     </Row>
 ));
 
-ServerView.PropTypes = {
+LogsServerView.PropTypes = {
     logs: PropTypes.array.isRequired
 };
 
-ServerView.displayName = 'ServerView';
+LogsServerView.displayName = 'LogsServerView';
 
-export default ServerView;
+export default LogsServerView;

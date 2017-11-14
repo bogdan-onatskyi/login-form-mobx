@@ -9,9 +9,8 @@
         "doc": "docs"
     },
     "scripts": {
-        "start": "webpack-dev-server --config webpack.dev.js",
-        "build": "webpack --progress --config webpack.prod.js",
-        "express-server": "node express-server/server.js"
+        "start": "cross-env NODE_ENV=development node src/server.js",
+        "build": "webpack --progress --config webpack.prod.js"
     },
     "browserslist": [
         "> 5%",
@@ -49,6 +48,7 @@
         "babel-preset-stage-0": "^6.24.1",
         "classnames": "^2.2.5",
         "clean-webpack-plugin": "^0.1.17",
+        "cross-env": "^5.1.1",
         "css-loader": "^0.28.7",
         "extract-text-webpack-plugin": "^3.0.2",
         "file-loader": "^1.1.5",
@@ -59,12 +59,13 @@
         "optimize-css-assets-webpack-plugin": "^3.2.0",
         "postcss-loader": "^2.0.8",
         "prop-types": "^15.6.0",
-        "react-hot-loader": "^3.1.1",
+        "react-hot-loader": "^3.1.2",
         "sass-loader": "^6.0.6",
         "style-loader": "^0.19.0",
         "uglifyjs-webpack-plugin": "^1.0.1",
         "url-loader": "^0.6.2",
         "webpack": "^3.8.1",
+        "webpack-dev-middleware": "^1.12.0",
         "webpack-dev-server": "^2.9.3",
         "webpack-hot-middleware": "^2.20.0",
         "webpack-merge": "^4.1.0"

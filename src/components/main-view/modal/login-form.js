@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import {observable, computed, action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
-
 import axios from 'axios';
-
 import {FormGroup, FormControl, Button, Glyphicon} from 'react-bootstrap';
+import {toString} from '../../../utils/utils';
 
 import './login-form.scss';
 
@@ -36,17 +35,6 @@ class RenderLoginForm extends Component {
     handleLoggingIn = () => {
         if (this.isLoggingIn) return;
 
-        const toString = (comment, data) => {
-            const valuesArray = [];
-            let value;
-
-            for (let prop in data) {
-                value = data[prop] === "" ? '""' : data[prop];
-                valuesArray.push(`${prop}:${value}`);
-            }
-
-            return `${comment} { ${valuesArray.join(', ')} }`;
-        };
         const {logsStore, user} = this.props;
         const reqData = {
             Username: user.Username,
@@ -60,8 +48,9 @@ class RenderLoginForm extends Component {
         );
 
         if (process.env.NODE_ENV === 'production-gh-pages') {
-            // This block simulates server behavior for gh-pages
             const {Username, Password} = reqData;
+
+            console.warn('It simulates server behavior for gh-pages');
 
             setTimeout(() => {
                 let data = {
@@ -93,8 +82,7 @@ class RenderLoginForm extends Component {
         }
 
         if (process.env.NODE_ENV !== 'production-gh-pages') {
-            axios.post('http://localhost:8080/login', reqData)
-            // axios.post('http://localhost:8080/login', JSON.stringify(reqData))
+            axios.post('/login', reqData)
                 .then(response => response.data)
                 .then(data => {
                     if (user.Title === 'simulate network error')

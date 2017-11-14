@@ -4,7 +4,7 @@ import {inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 
 import UsersView from './users/users';
-import ServerView from './server/server';
+import LogsServerView from './logs-server-view/logs-server-view';
 import ShowModal from './modal/show-modal';
 
 import './main-view.scss';
@@ -45,7 +45,7 @@ class MainView extends Component {
 
                 <UsersView users={Users} openModal={this.openModal}/>
 
-                <ServerView logs={Logs}/>
+                <LogsServerView logs={Logs}/>
 
                 <ShowModal isShowModal={this.showModal}
                            closeModal={this.closeModal}

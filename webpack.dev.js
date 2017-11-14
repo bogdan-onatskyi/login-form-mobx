@@ -10,25 +10,19 @@ const NODE_ENV = 'development';
 
 module.exports = merge(common, {
     entry: [
-        // 'webpack-hot-middleware/client?reload=true',
         'react-hot-loader/patch',
+        'webpack-hot-middleware/client',
+        // 'webpack-hot-middleware/client?reload=true',
         './src/index.js'
     ],
 
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'docs'),
+        publicPath: "/"
     },
 
     devtool: 'eval',
-
-    devServer: {
-        contentBase: './dist',
-        port: 3000,
-        hot: true,
-        // hotOnly: true,
-        open: false
-    },
 
     module: {
         rules: [

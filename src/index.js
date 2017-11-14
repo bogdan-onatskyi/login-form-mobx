@@ -10,7 +10,7 @@ import './index.scss';
 
 const render = Component => {
     ReactDOM.render(
-        <AppContainer>
+        <AppContainer warnings={false}>
             <Component/>
         </AppContainer>,
         document.getElementById('app'),
@@ -20,8 +20,7 @@ const render = Component => {
 render(App);
 
 if (module.hot) {
-    // module.hot.accept('./components/app/app', () => {
-    module.hot.accept('./index', () => {
+    module.hot.accept('./components/app/app', () => {
         render(App);
     });
 }
